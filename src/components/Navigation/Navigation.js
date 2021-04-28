@@ -11,7 +11,8 @@ import { NavigationListItem } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
+    color: '#fff'
   }
 }));
 
@@ -49,8 +50,7 @@ const reduceChildRoutes = props => {
         key={page.title}
         label={page.label}
         open={Boolean(open)}
-        title={page.title}
-      >
+        title={page.title}>
         <NavigationList
           depth={depth + 1}
           pages={page.children}
@@ -81,16 +81,13 @@ const Navigation = props => {
   const router = useRouter();
 
   return (
-    <Component
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      {title && <Typography variant="overline">{title}</Typography>}
-      <NavigationList
-        depth={0}
-        pages={pages}
-        router={router}
-      />
+    <Component {...rest} className={clsx(classes.root, className)}>
+      {title && (
+        <Typography variant="overline" style={{ color: '#fff' }}>
+          {title}
+        </Typography>
+      )}
+      <NavigationList depth={0} pages={pages} router={router} />
     </Component>
   );
 };

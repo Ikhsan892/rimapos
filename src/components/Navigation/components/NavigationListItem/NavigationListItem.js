@@ -9,10 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 const CustomRouterLink = forwardRef((props, ref) => (
-  <div
-    ref={ref}
-    style={{ flexGrow: 1 }}
-  >
+  <div ref={ref} style={{ flexGrow: 1 }}>
     <RouterLink {...props} />
   </div>
 ));
@@ -20,6 +17,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
 const useStyles = makeStyles(theme => ({
   item: {
     display: 'block',
+    color: '#fff',
     paddingTop: 0,
     paddingBottom: 0
   },
@@ -29,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0
   },
   button: {
-    color: colors.blueGrey[800],
+    color: '#fff',
     padding: '10px 8px',
     justifyContent: 'flex-start',
     textTransform: 'none',
@@ -37,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   buttonLeaf: {
-    color: colors.blueGrey[800],
+    color: '#fff',
     padding: '10px 8px',
     justifyContent: 'flex-start',
     textTransform: 'none',
@@ -49,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   icon: {
-    color: theme.palette.icon,
+    color: '#fff',
     display: 'flex',
     alignItems: 'center',
     marginRight: theme.spacing(1)
@@ -108,25 +106,14 @@ const NavigationListItem = props => {
       <ListItem
         {...rest}
         className={clsx(classes.item, className)}
-        disableGutters
-      >
-        <Button
-          className={classes.button}
-          onClick={handleToggle}
-          style={style}
-        >
+        disableGutters>
+        <Button className={classes.button} onClick={handleToggle} style={style}>
           {Icon && <Icon className={classes.icon} />}
           {title}
           {open ? (
-            <ExpandLessIcon
-              className={classes.expandIcon}
-              color="inherit"
-            />
+            <ExpandLessIcon className={classes.expandIcon} color="inherit" />
           ) : (
-            <ExpandMoreIcon
-              className={classes.expandIcon}
-              color="inherit"
-            />
+            <ExpandMoreIcon className={classes.expandIcon} color="inherit" />
           )}
         </Button>
         <Collapse in={open}>{children}</Collapse>
@@ -137,16 +124,14 @@ const NavigationListItem = props => {
       <ListItem
         {...rest}
         className={clsx(classes.itemLeaf, className)}
-        disableGutters
-      >
+        disableGutters>
         <Button
           activeClassName={classes.active}
           className={clsx(classes.buttonLeaf, `depth-${depth}`)}
           component={CustomRouterLink}
           exact
           style={style}
-          to={href}
-        >
+          to={href}>
           {Icon && <Icon className={classes.icon} />}
           {title}
           {Label && (

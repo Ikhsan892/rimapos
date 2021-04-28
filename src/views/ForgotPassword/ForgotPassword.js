@@ -1,17 +1,16 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import { Page } from 'components';
 import {
   Card,
   CardContent,
-  CardMedia,
-  Typography,
   Divider,
-  Link
+  Link,
+  Typography
 } from '@material-ui/core';
-import LockIcon from '@material-ui/icons/Lock';
-import { Page } from 'components';
-import { LoginForm } from './components';
+import { ForgotForm } from './components';
+import { ChangeHistory } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(6, 2)
   },
   card: {
-    width: theme.breakpoints.values.md,
+    width: theme.breakpoints.values.sm,
     maxWidth: '100%',
     overflow: 'unset',
     display: 'flex',
@@ -60,7 +59,7 @@ const useStyles = makeStyles(theme => ({
     width: 64,
     fontSize: 32
   },
-  loginForm: {
+  forgotForm: {
     marginTop: theme.spacing(3)
   },
   divider: {
@@ -85,22 +84,31 @@ const useStyles = makeStyles(theme => ({
     fontSize: 20
   }
 }));
-
-const Login = () => {
+const ForgotPassword = () => {
   const classes = useStyles();
-
   return (
-    <Page className={classes.root} title="Masuk ke Rima POS">
+    <Page className={classes.root} title="Lupa Password">
       <Card className={classes.card}>
         <CardContent className={classes.content}>
-          <LockIcon className={classes.icon} />
+          <ChangeHistory className={classes.icon} />
           <Typography gutterBottom variant="h3">
-            Masuk
+            Lupa Password
           </Typography>
-          <Typography variant="subtitle2">Untuk Mengatur Semua</Typography>
-          <LoginForm className={classes.loginForm} />
+          <Typography variant="subtitle2">
+            Email Reset akan Dikirimkan
+          </Typography>
+          <ForgotForm className={classes.forgotForm} />
           <Divider className={classes.divider} />
           <div className={classes.links}>
+            <Link
+              align="center"
+              color="secondary"
+              component={RouterLink}
+              to="/auth/login"
+              underline="always"
+              variant="subtitle2">
+              Masuk
+            </Link>
             <Link
               align="center"
               color="secondary"
@@ -108,33 +116,13 @@ const Login = () => {
               to="/auth/register"
               underline="always"
               variant="subtitle2">
-              Tidak punya akun? Daftar Gratis!
-            </Link>
-            <Link
-              align="center"
-              color="secondary"
-              component={RouterLink}
-              to="/auth/forgot-password"
-              underline="always"
-              variant="subtitle2">
-              Lupa Password
+              Daftar
             </Link>
           </div>
         </CardContent>
-        <CardMedia
-          className={classes.media}
-          image="/images/auth.png"
-          title="Cover">
-          <Typography
-            color="inherit"
-            variant="subtitle1"
-            className={classes.textSub}>
-            Atur dan Kembangkan Bisnismu dengan Mudah
-          </Typography>
-        </CardMedia>
       </Card>
     </Page>
   );
 };
 
-export default Login;
+export default ForgotPassword;

@@ -31,6 +31,11 @@ const routes = [
         component: lazy(() => import('views/Register'))
       },
       {
+        path: '/auth/forgot-password',
+        exact: true,
+        component: lazy(() => import('views/ForgotPassword'))
+      },
+      {
         component: () => <Redirect to="/errors/error-404" />
       }
     ]

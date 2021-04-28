@@ -99,14 +99,13 @@ const RegisterLeftForm = props => {
         <Select
           native
           label="Tipe Bisnis"
+          name="typeBusiness"
           shrink
           error={hasError('typeBusiness')}
           onChange={handleChange}
           value={formState.values.typeBusiness}
           inputProps={{ name: 'typeBusiness', id: 'typeBusiness' }}>
-          <option value="" disabled>
-            Pilih Tipe Bisnismu
-          </option>
+          <option value=""></option>
           <option value="retail">Retail</option>
           <option value="restoran" disabled>
             Restoran
