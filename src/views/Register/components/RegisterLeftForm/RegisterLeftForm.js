@@ -1,50 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import validate from 'validate.js';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Checkbox,
   FormHelperText,
   TextField,
-  Typography,
-  Link
+  FormControl,
+  InputLabel,
+  Select
 } from '@material-ui/core';
-
-import useRouter from 'utils/useRouter';
-
-const schema = {
-  firstName: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  lastName: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 32
-    }
-  },
-  email: {
-    presence: { allowEmpty: false, message: 'is required' },
-    email: true,
-    length: {
-      maximum: 64
-    }
-  },
-  password: {
-    presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 128
-    }
-  },
-  policy: {
-    presence: { allowEmpty: false, message: 'is required' },
-    checked: true
-  }
-};
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -57,37 +21,31 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1)
     }
   },
-  policy: {
-    display: 'flex',
-    alignItems: 'center'
-  },
   policyCheckbox: {
     marginLeft: '-14px'
   }
 }));
 
 const RegisterLeftForm = props => {
-  const { className, ...rest } = props;
+  const { hasError, setFormState, formState } = props;
 
   const classes = useStyles();
-  const { history } = useRouter();
 
-  const [formState, setFormState] = useState({
-    isValid: false,
-    values: {},
-    touched: {},
-    errors: {}
-  });
+  const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    const errors = validate(formState.values, schema);
-
-    setFormState(formState => ({
-      ...formState,
-      isValid: errors ? false : true,
-      errors: errors || {}
-    }));
-  }, [formState.values]);
+    const fetchCountry = async () => {
+      await axios
+        .get('https://restcountries.eu/rest/v2/all')
+        .then(response => {
+          setCountries(response.data);
+        })
+        .catch(err => {
+          alert('something error');
+        });
+    };
+    fetchCountry();
+  }, []);
 
   const handleChange = event => {
     event.persist();
@@ -108,92 +66,96 @@ const RegisterLeftForm = props => {
     }));
   };
 
-  const handleSubmit = async event => {
-    event.preventDefault();
-    history.push('/');
-  };
-
-  const hasError = field =>
-    formState.touched[field] && formState.errors[field] ? true : false;
-
   return (
-    <form
-      {...rest}
-      className={clsx(classes.root, className)}
-      onSubmit={handleSubmit}>
-      <div className={classes.fields}>
-        <TextField
-          error={hasError('firstName')}
-          helperText={
-            hasError('firstName') ? formState.errors.firstName[0] : null
-          }
-          label="Nama Bisnis"
-          name="firstName"
+    <div className={classes.fields}>
+      <TextField
+        error={hasError('namaBisnis')}
+        helperText={
+          hasError('namaBisnis') ? formState.errors.namaBisnis[0] : null
+        }
+        label="Nama Bisnis"
+        name="namaBisnis"
+        onChange={handleChange}
+        fullWidth
+        value={formState.values.namaBisnis || ''}
+        variant="outlined"
+      />
+      <TextField
+        error={hasError('telepon')}
+        helperText={hasError('telepon') ? formState.errors.telepon[0] : null}
+        label="Nomor Telepon"
+        name="telepon"
+        fullWidth
+        onChange={handleChange}
+        value={formState.values.telepon || ''}
+        variant="outlined"
+      />
+      <FormControl
+        className={classes.formControl}
+        variant="outlined"
+        shrink
+        fullWidth>
+        <InputLabel htmlFor="typeBusiness">Tipe Bisnis</InputLabel>
+        <Select
+          native
+          label="Tipe Bisnis"
+          shrink
+          error={hasError('typeBusiness')}
           onChange={handleChange}
-          value={formState.values.firstName || ''}
-          variant="outlined"
-        />
-        <TextField
-          error={hasError('lastName')}
-          helperText={
-            hasError('lastName') ? formState.errors.lastName[0] : null
-          }
-          label="Nomor Telepon"
-          name="lastName"
+          value={formState.values.typeBusiness}
+          inputProps={{ name: 'typeBusiness', id: 'typeBusiness' }}>
+          <option value="" disabled>
+            Pilih Tipe Bisnismu
+          </option>
+          <option value="retail">Retail</option>
+          <option value="restoran" disabled>
+            Restoran
+          </option>
+        </Select>
+        {hasError('typeBusiness') && (
+          <FormHelperText error>
+            {formState.errors.typeBusiness[0]}
+          </FormHelperText>
+        )}
+      </FormControl>
+      <FormControl
+        className={classes.formControl}
+        variant="outlined"
+        shrink
+        fullWidth>
+        <InputLabel htmlFor="negara">Negara</InputLabel>
+        <Select
+          native
+          label="Negara"
+          error={hasError('negara')}
+          shrink
           onChange={handleChange}
-          value={formState.values.lastName || ''}
-          variant="outlined"
-        />
-        <TextField
-          error={hasError('email')}
-          fullWidth
-          helperText={hasError('email') ? formState.errors.email[0] : null}
-          label="Email address"
-          name="email"
-          onChange={handleChange}
-          value={formState.values.email || ''}
-          variant="outlined"
-        />
-        <TextField
-          error={hasError('password')}
-          fullWidth
-          helperText={
-            hasError('password') ? formState.errors.password[0] : null
-          }
-          label="Password"
-          name="password"
-          onChange={handleChange}
-          type="password"
-          value={formState.values.password || ''}
-          variant="outlined"
-        />
-        <div>
-          <div className={classes.policy}>
-            <Checkbox
-              checked={formState.values.policy || false}
-              className={classes.policyCheckbox}
-              color="primary"
-              name="policy"
-              onChange={handleChange}
-            />
-            <Typography color="textSecondary" variant="body1">
-              I have read the{' '}
-              <Link
-                color="secondary"
-                component={RouterLink}
-                to="#"
-                underline="always"
-                variant="h6">
-                Terms and Conditions
-              </Link>
-            </Typography>
-          </div>
-          {hasError('policy') && (
-            <FormHelperText error>{formState.errors.policy[0]}</FormHelperText>
-          )}
-        </div>
-      </div>
-    </form>
+          inputProps={{ name: 'negara', id: 'negara' }}>
+          <option value="" disabled>
+            Pilih Negaramu
+          </option>
+          {countries &&
+            countries.map(country => (
+              <option value={country.name}>{country.name}</option>
+            ))}
+        </Select>
+        {hasError('negara') && (
+          <FormHelperText error>{formState.errors.negara[0]}</FormHelperText>
+        )}
+      </FormControl>
+      <TextField
+        error={hasError('alamat')}
+        fullWidth
+        helperText={hasError('alamat') ? formState.errors.alamat[0] : null}
+        multiline
+        rows={5}
+        label="Alamat"
+        name="alamat"
+        onChange={handleChange}
+        value={formState.values.alamat || ''}
+        variant="outlined"
+      />
+    </div>
   );
 };
 

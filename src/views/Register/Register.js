@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -6,34 +6,91 @@ import {
   Card,
   CardActions,
   CardContent,
-  Divider,
   Link,
   Grid,
   Typography
 } from '@material-ui/core';
 import AssignmentTurnedIn from '@material-ui/icons/AssignmentTurnedIn';
+import validate from 'validate.js';
+import clsx from 'clsx';
 import { Page } from 'components';
-import { RegisterForm, RegisterLeftForm } from './components';
+import { RegisterRightForm, RegisterLeftForm } from './components';
+import useRouter from 'utils/useRouter';
+
+const schema = {
+  namaBisnis: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      maximum: 32
+    }
+  },
+  telepon: {
+    numericality: true,
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      minimum: 7
+    }
+  },
+  typeBusiness: {
+    presence: { allowEmpty: false, message: 'is required' }
+  },
+  negara: {
+    presence: { allowEmpty: false, message: 'is required' }
+  },
+  alamat: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      minimum: 5
+    }
+  },
+  owner: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      maximum: 32
+    }
+  },
+  kelamin: {
+    presence: { allowEmpty: false, message: 'is required' }
+  },
+  email: {
+    presence: { allowEmpty: false, message: 'is required' },
+    email: true,
+    length: {
+      maximum: 64
+    }
+  },
+  password: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      maximum: 128
+    }
+  }
+};
 
 const useStyles = makeStyles(theme => ({
+  rotForm: {},
   root: {
     height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 60,
-    padding: theme.spacing(3, 2, 2, 11)
+    marginTop: 160
   },
   card: {
     width: theme.breakpoints.values.md,
     maxWidth: '100%',
     overflow: 'unset',
     paddingTop: 80,
+    paddingBottom: 20,
     position: 'relative'
   },
   submitButton: {
     marginTop: theme.spacing(2),
     width: '100%'
+  },
+  link: {
+    marginLeft: 35,
+    paddingBottom: 40
   },
   media: {
     borderTopRightRadius: 4,
@@ -77,6 +134,32 @@ const useStyles = makeStyles(theme => ({
 
 const Register = () => {
   const classes = useStyles();
+  const { history } = useRouter();
+  const [formState, setFormState] = useState({
+    isValid: false,
+    values: {},
+    touched: {},
+    errors: {}
+  });
+
+  useEffect(() => {
+    const errors = validate(formState.values, schema);
+
+    setFormState(formState => ({
+      ...formState,
+      isValid: errors ? false : true,
+      errors: errors || {}
+    }));
+  }, [formState.values]);
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    console.log(formState.values);
+    history.push('/');
+  };
+
+  const hasError = field =>
+    formState.touched[field] && formState.errors[field] ? true : false;
 
   return (
     <Page className={classes.root} title="Daftarkan Bisnismu">
@@ -87,37 +170,50 @@ const Register = () => {
         <Typography variant="subtitle2" align="center">
           Gratis Tanpa Biaya
         </Typography>
-        <CardContent>
-          <Grid container spacing={1} justifyContent="center">
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <AssignmentTurnedIn className={classes.icon} />
-              <RegisterLeftForm className={classes.registerForm} />
+        <form className={clsx(classes.rootForm)} onSubmit={handleSubmit}>
+          <CardContent>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <AssignmentTurnedIn className={classes.icon} />
+                <RegisterLeftForm
+                  className={classes.registerForm}
+                  hasError={hasError}
+                  setFormState={setFormState}
+                  formState={formState}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <RegisterRightForm
+                  className={classes.registerForm}
+                  hasError={hasError}
+                  setFormState={setFormState}
+                  formState={formState}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <RegisterForm className={classes.registerForm} />
-            </Grid>
-          </Grid>
-          <Link
-            align="center"
-            color="secondary"
-            component={RouterLink}
-            to="/auth/login"
-            underline="always"
-            variant="subtitle2">
-            Sudah Punya Akun?
-          </Link>
-        </CardContent>
-        <CardActions>
-          <Button
-            className={classes.submitButton}
-            color="primary"
-            size="large"
-            type="submit"
-            variant="contained">
-            Create account
-          </Button>
-        </CardActions>
-        <Divider className={classes.divider} />
+          </CardContent>
+          <CardActions>
+            <Button
+              className={classes.submitButton}
+              color="primary"
+              disabled={!formState.isValid}
+              size="large"
+              type="submit"
+              variant="contained">
+              Create account
+            </Button>
+          </CardActions>
+        </form>
+        <Link
+          align="center"
+          color="secondary"
+          className={classes.link}
+          component={RouterLink}
+          to="/auth/login"
+          underline="always"
+          variant="subtitle2">
+          Sudah Punya Akun?
+        </Link>
       </Card>
     </Page>
   );
