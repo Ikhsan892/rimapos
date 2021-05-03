@@ -68,86 +68,37 @@ const Statistics = props => {
   }
 
   return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <Grid
-        alignItems="center"
-        container
-        justify="space-between"
-      >
-        <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
-        >
-          <Typography variant="h2">${statistics.payout}</Typography>
-          <Typography
-            className={classes.overline}
-            variant="overline"
-          >
-            Next payout
+    <Card {...rest} className={clsx(classes.root, className)}>
+      <Grid alignItems="center" container justify="space-between">
+        <Grid className={classes.item} item md={3} sm={6} xs={12}>
+          <Typography variant="h2">{statistics.pelanggan}</Typography>
+          <Typography className={classes.overline} variant="overline">
+            Pelanggan
           </Typography>
         </Grid>
-        <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
-        >
-          <Typography variant="h2">${statistics.projects}</Typography>
-          <Typography
-            className={classes.overline}
-            variant="overline"
-          >
-            Total products
+        <Grid className={classes.item} item md={3} sm={6} xs={12}>
+          <Typography variant="h2">{statistics.barang}</Typography>
+          <Typography className={classes.overline} variant="overline">
+            Barang
           </Typography>
         </Grid>
-        <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
-        >
-          <Typography variant="h2">{statistics.visitors}</Typography>
-          <Typography
-            className={classes.overline}
-            variant="overline"
-          >
-            Today's Visitors
+        <Grid className={classes.item} item md={3} sm={6} xs={12}>
+          <Typography variant="h2">{statistics.piutang}</Typography>
+          <Typography className={classes.overline} variant="overline">
+            Piutang
           </Typography>
         </Grid>
-        <Grid
-          className={classes.item}
-          item
-          md={3}
-          sm={6}
-          xs={12}
-        >
+        <Grid className={classes.item} item md={3} sm={6} xs={12}>
           <div className={classes.titleWrapper}>
-            <Typography
-              component="span"
-              variant="h2"
-            >
-              {statistics.watching}
+            <Typography component="span" variant="h2">
+              {statistics.transaksi}
             </Typography>
-            <Label
-              className={classes.label}
-              color={colors.green[600]}
-            >
-              Live
+            <Label className={classes.label} color={colors.green[600]}>
+              Hari Ini
             </Label>
           </div>
-          <Typography
-            className={classes.overline}
-            variant="overline"
-          >
-            Watching now
+          <Typography className={classes.overline} variant="overline">
+            Transaksi
           </Typography>
         </Grid>
       </Grid>

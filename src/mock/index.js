@@ -11,3 +11,5 @@ export * from './kanbanMock';
 export * from './taskMock';
 export * from './orderMock';
 export * from './dashboardMock';
+export * from './stockMock';
+export * from './utangMock';

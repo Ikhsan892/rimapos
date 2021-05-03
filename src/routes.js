@@ -109,6 +109,11 @@ const routes = [
         component: lazy(() => import('views/KanbanBoard'))
       },
       {
+        path: '/kasir',
+        exact: true,
+        component: lazy(() => import('views/Kasir'))
+      },
+      {
         path: '/mail',
         exact: true,
         component: lazy(() => import('views/Mail'))
