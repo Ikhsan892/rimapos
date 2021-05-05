@@ -9,6 +9,7 @@ export { default as GoogleAnalytics } from './GoogleAnalytics';
 export { default as Label } from './Label';
 export { default as Markdown } from './Markdown';
 export { default as Navigation } from './Navigation';
+export { default as NumberInput } from './NumberInput';
 export { default as NotificationsPopover } from './NotificationsPopover';
 export { default as Page } from './Page';
 export { default as Paginate } from './Paginate';
